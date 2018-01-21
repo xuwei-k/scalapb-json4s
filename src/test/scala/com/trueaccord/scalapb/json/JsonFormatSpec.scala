@@ -6,7 +6,7 @@ import org.json4s.JsonDSL._
 import org.scalatest.{Assertion, FlatSpec, MustMatchers, OptionValues}
 import jsontest.test._
 import jsontest.test3._
-import com.google.protobuf.util.{JsonFormat => JavaJsonFormat}
+import com.google.protobuf.util.{FieldMaskUtil, JsonFormat => JavaJsonFormat}
 import com.google.protobuf.any.{Any => PBAny}
 import com.google.protobuf.util.JsonFormat.{TypeRegistry => JavaTypeRegistry}
 import jsontest.custom_collection.{Guitar, Studio}
@@ -405,5 +405,11 @@ class JsonFormatSpec extends FlatSpec with MustMatchers with OptionValues {
     val studio = JsonFormat.fromJsonString(studioJsonString)
     studio must be(expectedStudio)
   }
-  
+
+  "FieldMask" should "give correct json" in {
+    val message = TestFieldMask(Some(
+      com.google.protobuf.field_mask.FieldMask.fromJavaProto(
+        FieldMaskUtil.fromString("foo.bar,baz,foo_bar.baz"))))
+    JsonFormat.toJsonString(message) must be("""{"fieldMaskValue":"foo.bar,baz,fooBar.baz"}""")
+  }
 }
