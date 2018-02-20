@@ -1,6 +1,8 @@
 import ReleaseTransformations._
 import scalapb.compiler.Version.scalapbVersion
 
+publishTo := sonatypePublishTo.value
+
 scalaVersion := "2.11.8"
 
 crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.1")
